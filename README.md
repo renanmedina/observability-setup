@@ -18,7 +18,7 @@ This repository is a personal guide and reference for creating a local observabi
 
 
 ### Running the infrastructure
-## **Keep in mind that the network "observability" which is pointing to an externa network in the networks section of the docker-composer and used in the services is something specific to my local setup AND IT SHOULD BE REMOVED BEFORE RUNNING THE DOCKER-COMPOSE command**
+## **Keep in mind that the network "observability" which is pointing to an external network in the networks section of the docker-compose and used in the services is something specific to MY LOCAL SETUP AND IT SHOULD BE REMOVED BEFORE RUNNING THE DOCKER-COMPOSE command**
 
 ```bash
 docker-compose -p="observability-stack" up -d
