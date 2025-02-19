@@ -1,0 +1,105 @@
+version: '3.7'
+services:
+  grafana:
+    container_name: observability-grafana
+    image: grafana/grafana:latest 
+    ports:
+      - "8881:3000"
+    environment:
+      - GF_LOG_LEVEL=debug
+      - GF_SECURITY_ADMIN_USER=renanmedina
+      - GF_PLUGIN_GRAFANA_IMAGE_RENDERER_RENDERING_IGNORE_HTTPS_ERRORS=true
+      - GF_SERVER_ROOT_URL=http://localhost:8881/
+      - GF_PLUGINS_PREINSTALL=grafana-clock-panel
+      - GF_FEATURE_TOGGLES_ENABLE=externalServiceAccounts
+      - GF_PLUGINS_ENABLE_ALPHA=true
+    volumes:
+      - ./storage/grafana:/var/lib/grafana
+    links:
+      - prometheus
+      - jaeger
+      - loki
+      # - elasticsearch
+    networks:
+      - observability
+    restart: unless-stopped
+  prometheus:
+    container_name: observability-prometheus
+    image: bitnami/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./configs/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
+    links:
+      - jaeger
+      - cadvisor
+    networks:
+      - observability
+    restart: unless-stopped
+  jaeger:
+    container_name: observability-jaeger
+    image: jaegertracing/jaeger:latest
+    ports:
+      - "8882:16686"
+      - "4417:4317"
+      - "4418:4318"
+      - "5778:5778"
+      - "9411:9411"
+    environment:
+      - OTEL_TRACES_SAMPLER=always_off
+      - METRICS_STORAGE_TYPE=prometheus
+      - PROMETHEUS_SERVER_URL=http://observability-prometheus:9090
+    volumes:
+      # - ./configs/jaeger.yml:/jaeger/config.yaml
+      - ./configs/jaeger.ui.json:/etc/jaeger/jaeger-ui.json
+      # - elasticsearch
+    networks:
+      - observability
+    restart: unless-stopped
+  cadvisor:
+    container_name: observability-cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
+    ports:
+      - "8883:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    privileged: true
+    devices:
+      - /dev/kmsg
+    networks:
+      - observability
+  loki:
+    container_name: observability-loki
+    image: grafana/loki:latest
+    ports:
+      - "8884:3100"
+      - "9095:9095"
+    volumes:
+      - ./configs/loki.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - observability
+  grafana-alloy:
+    container_name: observability-grafana-alloy
+    image: grafana/alloy:latest
+    ports:
+      - "8885:8885"
+    volumes:
+      - ./configs/grafana.alloy:/etc/alloy/config.alloy
+      - ./storage/grafana-alloy:/var/lib/alloy/
+      - /var/run/docker.sock:/var/run/docker.sock # bind docker socket directly
+      - /var/lib/docker/containers/:/var/log/containers/ # bind container log files
+    command: run /etc/alloy/config.alloy --server.http.listen-addr=0.0.0.0:8885 --storage.path=/var/lib/alloy/data
+    # privileged: true
+    networks:
+      - observability
+    links:
+      - loki
+networks:
+  observability:
+    external:
+      name: dcp-broadcaster-network

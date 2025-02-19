@@ -1,0 +1,6 @@
+storage/grafana/*
+!storage/grafana/.keep
+storage/grafana-alloy/*
+!storage/grafana-alloy/.keep
+storage/loki/*
+!storage/loki/.keep
