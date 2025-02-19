@@ -22,6 +22,7 @@ services:
       # - elasticsearch
     networks:
       - observability
+      - observability-bridge
     restart: unless-stopped
   prometheus:
     container_name: observability-prometheus
@@ -35,6 +36,7 @@ services:
       - cadvisor
     networks:
       - observability
+      - observability-bridge
     restart: unless-stopped
   jaeger:
     container_name: observability-jaeger
@@ -55,6 +57,7 @@ services:
       # - elasticsearch
     networks:
       - observability
+      - observability-bridge
     restart: unless-stopped
   cadvisor:
     container_name: observability-cadvisor
@@ -72,6 +75,7 @@ services:
       - /dev/kmsg
     networks:
       - observability
+      - observability-bridge
   loki:
     container_name: observability-loki
     image: grafana/loki:latest
@@ -83,6 +87,7 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - observability
+      - observability-bridge
   grafana-alloy:
     container_name: observability-grafana-alloy
     image: grafana/alloy:latest
@@ -97,9 +102,14 @@ services:
     # privileged: true
     networks:
       - observability
+      - observability-bridge
     links:
       - loki
 networks:
   observability:
     external:
       name: dcp-broadcaster-network
+  observability-bridge:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.host_binding_ipv4: "127.0.0.1"
