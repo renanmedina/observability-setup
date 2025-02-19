@@ -10,6 +10,7 @@ This repository is a personal guide and reference for creating a local observabi
  <img src="https://img.shields.io/badge/-Loki-4f54ff?style=flat-square&logo=grafana&logoColor=white" />
  <img src="https://img.shields.io/badge/-Prometheus-000000?style=flat-square&logo=prometheus&logoColor=white" />
  <img src="https://img.shields.io/badge/-Jaeger-007ACC?style=flat-square&logo=jaeger&logoColor=white" />
+ <img src="https://img.shields.io/badge/-cAdvisor-007ACC?style=flat-square&logo=google&logoColor=white" />
 </p>
 
 - [Grafana](https://grafana.com/docs/grafana/latest/): To visualize and create custom and personal dashboards
