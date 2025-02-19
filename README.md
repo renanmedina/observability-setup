@@ -4,6 +4,14 @@ This repository is a personal guide and reference for creating a local observabi
 
 ### OpenSource Tools Used
 
+<p>
+ <img src="https://img.shields.io/badge/-Grafana-F05032?style=flat-square&logo=grafana&logoColor=white" />
+ <img src="https://img.shields.io/badge/-Alloy-F05032?style=flat-square&logo=grafana&logoColor=white" />
+ <img src="https://img.shields.io/badge/-Loki-4f54ff?style=flat-square&logo=grafana&logoColor=white" />
+ <img src="https://img.shields.io/badge/-Prometheus-000000?style=flat-square&logo=prometheus&logoColor=white" />
+ <img src="https://img.shields.io/badge/-Jaeger-007ACC?style=flat-square&logo=jaeger&logoColor=white" />
+</p>
+
 - [Grafana](https://grafana.com/docs/grafana/latest/): To visualize and create custom and personal dashboards
 - [Grafana Alloy](https://grafana.com/docs/alloy/latest/?section=open-source-oss): Log Scrapper agent to learn more about it's syntax of ETL processing and log scrapping
   - Currently i'm using an approach to scrape logs directly from my docker containers applications running locally and aggregate those in loki to be viewed in Grafana
