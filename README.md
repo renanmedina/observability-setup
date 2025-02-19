@@ -2,6 +2,8 @@
 
 This repository is a personal guide and reference for creating a local observability environment with open source tools and learn more about it.
 
+<img src="docs/logs-example.png" />
+
 ### OpenSource Tools Used
 
 <p>
